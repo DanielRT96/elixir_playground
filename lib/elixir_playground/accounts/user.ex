@@ -9,7 +9,17 @@ defmodule ElixirPlayground.Accounts.User do
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
 
+    field :user_role, Ecto.Enum,
+      values: [:normal, :admin, :superadmin],
+      default: :normal
+
     timestamps(type: :utc_datetime)
+  end
+
+  def role_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:user_role])
+    |> validate_required([:user_role])
   end
 
   @doc """
