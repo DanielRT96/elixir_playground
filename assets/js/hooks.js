@@ -2,7 +2,10 @@ let Hooks = {}
 
 Hooks.CameraPermission = {
   mounted() {
-    this.el.addEventListener("click", () => {
+    this.controller = new AbortController()
+    const signal = this.controller.signal
+
+    this.handleClick = () => {
       navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
           console.log("Camera access granted")
@@ -14,8 +17,14 @@ Hooks.CameraPermission = {
           console.error("Camera access denied:", err)
           alert("Camera access denied or not available.")
         })
-    })
+    }
+    this.el.addEventListener("click", this.handleClick, { signal })
+  },
+
+  destroy() {
+    this.controller.abort();
   }
 }
+
 
 export default Hooks
