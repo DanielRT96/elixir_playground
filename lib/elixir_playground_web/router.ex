@@ -54,6 +54,8 @@ defmodule ElixirPlaygroundWeb.Router do
       on_mount: [{ElixirPlaygroundWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+      live "/location-selector", LocationSelectorLive
+      live "/profile", ProfileLive
     end
 
     live_session :require_superadmin,
