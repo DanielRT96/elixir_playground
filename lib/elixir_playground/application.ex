@@ -15,7 +15,8 @@ defmodule ElixirPlayground.Application do
       # Start a worker by calling: ElixirPlayground.Worker.start_link(arg)
       # {ElixirPlayground.Worker, arg},
       # Start to serve requests, typically the last entry
-      ElixirPlaygroundWeb.Endpoint
+      ElixirPlaygroundWeb.Endpoint,
+      {Finch, name: ElixirPlayground.Finch}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
