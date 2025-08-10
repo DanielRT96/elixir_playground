@@ -15,6 +15,16 @@ defmodule ElixirPlaygroundWeb.ProfileLive do
       <h1 class="text-2xl font-bold mb-6">Welcome to your profile page!</h1>
       <p>Profile: {@profile.email}</p>
       <p>Role: {@profile.user_role}</p>
+
+      <button
+        id="camera-btn"
+        phx-hook="CameraPermission"
+        class="btn btn-primary mt-4"
+      >
+        Take Photo
+      </button>
+
+      <video id="video" autoplay playsinline class="mt-4 hidden w-64 h-48 border"></video>
     </div>
     """
   end
