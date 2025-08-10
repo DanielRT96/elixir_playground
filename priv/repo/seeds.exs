@@ -9,3 +9,20 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+alias ElixirPlayground.Repo
+alias ElixirPlayground.Locations.Location
+
+locations = [
+  "Budapest - Nyugati",
+  "Budapest - Corvin",
+  "Budapest - Allee",
+  "Debrecen - Fórum",
+  "Szeged - Árkád",
+  "Pécs - Árkád"
+]
+
+for name <- locations do
+  %Location{name: name}
+  |> Repo.insert!(on_conflict: :nothing)
+end
