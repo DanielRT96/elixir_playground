@@ -115,6 +115,12 @@ defmodule ElixirPlayground.Accounts do
     User.email_changeset(user, attrs, opts)
   end
 
+  def update_user_role(user, new_role) do
+    user
+    |> User.role_changeset(%{user_role: new_role})
+    |> Repo.update()
+  end
+
   @doc """
   Updates the user email using the given token.
 
