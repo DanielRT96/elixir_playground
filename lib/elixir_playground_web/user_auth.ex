@@ -6,6 +6,7 @@ defmodule ElixirPlaygroundWeb.UserAuth do
 
   alias ElixirPlayground.Accounts
   alias ElixirPlayground.Accounts.Scope
+  alias ElixirPlayground.Accounts.User
 
   # Make the remember me cookie valid for 14 days. This should match
   # the session validity setting in UserToken.
@@ -230,6 +231,22 @@ defmodule ElixirPlaygroundWeb.UserAuth do
     end
   end
 
+  def on_mount(:require_superadmin, _params, session, socket) do
+    socket = mount_current_scope(socket, session)
+    user = socket.assigns.current_scope.user
+
+    if user.user_role == :superadmin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You do not have permission to view that page.")
+        |> Phoenix.LiveView.redirect(to: "/")
+
+      {:halt, socket}
+    end
+  end
+
   def on_mount(:require_sudo_mode, _params, session, socket) do
     socket = mount_current_scope(socket, session)
 
@@ -254,6 +271,12 @@ defmodule ElixirPlaygroundWeb.UserAuth do
 
       Scope.for_user(user)
     end)
+  end
+
+  def signed_in_path(%Plug.Conn{
+        assigns: %{current_scope: %Scope{user: %User{user_role: :superadmin}}}
+      }) do
+    ~p"/superadmin"
   end
 
   @doc "Returns the path to redirect to after log in."

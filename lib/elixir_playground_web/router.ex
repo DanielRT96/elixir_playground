@@ -56,6 +56,14 @@ defmodule ElixirPlaygroundWeb.Router do
       live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
     end
 
+    live_session :require_superadmin,
+      on_mount: [
+        {ElixirPlaygroundWeb.UserAuth, :require_authenticated},
+        {ElixirPlaygroundWeb.UserAuth, :require_superadmin}
+      ] do
+      live "/superadmin", SuperadminLive
+    end
+
     post "/users/update-password", UserSessionController, :update_password
   end
 
