@@ -1,12 +1,11 @@
 defmodule ElixirPlaygroundWeb.LocationSelectorLive do
   use ElixirPlaygroundWeb, :live_view
 
-  alias ElixirPlayground.Repo
-  alias ElixirPlayground.Locations.Location
+  alias ElixirPlayground.Locations
 
   @impl true
   def mount(_params, _session, socket) do
-    locations = Repo.all(Location)
+    locations = Locations.list_locations()
 
     {:ok,
      assign(socket,
@@ -22,11 +21,13 @@ defmodule ElixirPlaygroundWeb.LocationSelectorLive do
   end
 
   def handle_event("confirm_location", _params, socket) do
+    location_id = socket.assigns.selected_location_id
+
     {
       :noreply,
       socket
       |> put_flash(:info, "Location selected!")
-      |> push_navigate(to: "/profile")
+      |> push_navigate(to: ~p"/profile?location_id=#{location_id}")
     }
   end
 
