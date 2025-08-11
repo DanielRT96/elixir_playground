@@ -1,4 +1,5 @@
 import Config
+import Dotenvy
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
@@ -19,6 +20,14 @@ import Config
 if System.get_env("PHX_SERVER") do
   config :elixir_playground, ElixirPlaygroundWeb.Endpoint, server: true
 end
+
+if File.exists?(".env") do
+  IO.inspect(config_env())
+  IO.puts("Loading environment variables from .env")
+  source!([".env"])
+end
+
+config :elixir_playground, :airtable, api_key: env!("AIRTABLE_API_KEY", :string)
 
 if config_env() == :prod do
   database_url =
