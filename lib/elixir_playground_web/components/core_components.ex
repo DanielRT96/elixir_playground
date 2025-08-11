@@ -469,4 +469,66 @@ defmodule ElixirPlaygroundWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr :current_page, :integer, default: nil
+  attr :show_page_label, :boolean, default: false
+  attr :page_size, :integer, default: nil
+  attr :has_prev, :boolean, required: true
+  attr :has_next, :boolean, required: true
+  attr :prev_event, :string, default: "prev"
+  attr :next_event, :string, default: "next"
+  attr :prev_label, :string, default: "Prev"
+  attr :next_label, :string, default: "Next"
+  attr :size, :string, default: "btn-sm", values: ~w(btn-xs btn-sm btn-md btn-lg btn-xl)
+  attr :class, :string, default: nil
+  attr :rest, :global
+
+  def pagination(assigns) do
+    assigns =
+      assigns
+      |> assign_new(:show_page_label, fn ->
+        Map.get(assigns, :show_page_label) || not is_nil(assigns[:current_page])
+      end)
+
+    ~H"""
+    <div class={["flex items-center justify-between gap-3", @class]} {@rest}>
+      <div :if={@page_size} class="text-sm text-black opacity-70">
+        Page size: {@page_size}
+      </div>
+
+      <div class="join">
+        <button
+          class={["join-item btn", @size]}
+          phx-click={@prev_event}
+          disabled={!@has_prev}
+          type="button"
+        >
+          {@prev_label}
+        </button>
+
+        <button
+          :if={@show_page_label}
+          class={["join-item btn", @size, "btn-ghost"]}
+          type="button"
+          disabled
+        >
+          <%= if @current_page do %>
+            Page {@current_page}
+          <% else %>
+            —
+          <% end %>
+        </button>
+
+        <button
+          class={["join-item btn", @size]}
+          phx-click={@next_event}
+          disabled={!@has_next}
+          type="button"
+        >
+          {@next_label}
+        </button>
+      </div>
+    </div>
+    """
+  end
 end

@@ -64,6 +64,7 @@ defmodule ElixirPlaygroundWeb.Router do
         {ElixirPlaygroundWeb.UserAuth, :require_superadmin}
       ] do
       live "/superadmin", SuperadminLive
+      live "/airtable", AirtableLive
     end
 
     post "/users/update-password", UserSessionController, :update_password

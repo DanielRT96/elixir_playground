@@ -231,6 +231,22 @@ defmodule ElixirPlaygroundWeb.UserAuth do
     end
   end
 
+  def on_mount(:require_admin, _params, session, socket) do
+    socket = mount_current_scope(socket, session)
+    user = socket.assigns.current_scope.user
+
+    if user.user_role == :admin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You do not have permission to view that page.")
+        |> Phoenix.LiveView.redirect(to: "/")
+
+      {:halt, socket}
+    end
+  end
+
   def on_mount(:require_superadmin, _params, session, socket) do
     socket = mount_current_scope(socket, session)
     user = socket.assigns.current_scope.user

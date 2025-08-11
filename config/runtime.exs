@@ -27,7 +27,10 @@ if File.exists?(".env") do
   source!([".env"])
 end
 
-config :elixir_playground, :airtable, api_key: env!("AIRTABLE_API_KEY", :string)
+config :elixir_playground, :airtable,
+  api_key: env!("AIRTABLE_API_KEY", :string),
+  base_id: env!("AIRTABLE_BASE_ID", :string),
+  table_name: env!("AIRTABLE_TABLE_NAME", :string)
 
 if config_env() == :prod do
   database_url =
