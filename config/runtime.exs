@@ -21,10 +21,16 @@ if System.get_env("PHX_SERVER") do
   config :elixir_playground, ElixirPlaygroundWeb.Endpoint, server: true
 end
 
-if File.exists?(".env") do
+env_file =
+  case config_env() do
+    :test -> ".env.test"
+    _ -> ".env"
+  end
+
+if File.exists?(env_file) do
   IO.inspect(config_env())
-  IO.puts("Loading environment variables from .env")
-  source!([".env"])
+  IO.puts("Loading environment variables from #{env_file}")
+  source!([env_file])
 end
 
 config :elixir_playground, :airtable,
